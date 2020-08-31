@@ -2,7 +2,6 @@ using Mutagen.Bethesda;
 using Mutagen.Bethesda.Synthesis;
 using Mutagen.Bethesda.Skyrim;
 using Noggog;
-using Loqui;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -26,7 +25,6 @@ namespace FaceFixer
                 }
             );
         }
-
         public static void RunPatch(SynthesisState<ISkyrimMod, ISkyrimModGetter> state)
         {
             string path = @"facefixer.json";
