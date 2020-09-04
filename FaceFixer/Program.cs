@@ -42,15 +42,19 @@ namespace FaceFixer
                 throw new System.Exception("'facefixer.json' must contain a single array of strings of plugin names");
             }
 
+            var npcGroups = state.LoadOrder.PriorityOrder
+                .Reverse()
+                .Where(listing => listing.Mod != null)
+                .Select(x => (ModKey: x.ModKey, Npcs: x.Mod!.Npcs))
+                .ToList();
+
             foreach (var npc in state.LoadOrder.PriorityOrder.WinningOverrides<INpcGetter>())
             {
-                foreach (var listing in state.LoadOrder.PriorityOrder.Reverse())
+                foreach (var npcGroup in npcGroups)
                 {
-                    if (listing.Mod == null) continue;
+                    if (!files.Contains(npcGroup.ModKey)) continue;
 
-                    if (!listing.Mod.Npcs.RecordCache.TryGetValue(npc.FormKey, out var sourceNpc)) continue;
-
-                    if (!files.Contains(listing.Mod.ModKey)) continue;
+                    if (!npcGroup.Npcs.RecordCache.TryGetValue(npc.FormKey, out var sourceNpc)) continue;
 
                     var modifiedNpc = state.PatchMod.Npcs.GetOrAddAsOverride(npc);
                     modifiedNpc.DeepCopyIn(sourceNpc, new Npc.TranslationMask(false)
