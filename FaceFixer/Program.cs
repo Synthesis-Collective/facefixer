@@ -27,10 +27,10 @@ namespace FaceFixer
         }
         public static void RunPatch(SynthesisState<ISkyrimMod, ISkyrimModGetter> state)
         {
-            string path = @"facefixer.json";
+            string path = Path.Combine(state.ExtraSettingsDataPath, "facefixer.json");
             if (!File.Exists(path))
             {
-                throw new System.Exception("'facefixer.json' must exist in the same folder as 'FaceFixer.exe'");
+                throw new System.Exception("'facefixer.json' did not exist in user data folder");
 
             }
 
