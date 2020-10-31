@@ -53,6 +53,7 @@ namespace FaceFixer
                 .Reverse()
                 .Where(listing => listing.Mod != null)
                 .Select(x => (ModKey: x.ModKey, Npcs: x.Mod!.Npcs))
+                .Where(x => x.Npcs.Count > 0)
                 .ToList();
 
             uint count = 0;
