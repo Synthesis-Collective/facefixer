@@ -30,16 +30,23 @@ namespace FaceFixer
             string path = Path.Combine(state.ExtraSettingsDataPath, "facefixer.json");
             if (!File.Exists(path))
             {
-                throw new System.Exception("'facefixer.json' did not exist in user data folder");
-
+                System.Console.WriteLine("'facefixer.json' did not exist in user data folder");
+                return;
             }
 
             TextReader textReader = File.OpenText(path);
-            dynamic files = JsonConvert.DeserializeObject<HashSet<ModKey>>(textReader.ReadToEnd());
+            var files = JsonConvert.DeserializeObject<HashSet<ModKey>>(textReader.ReadToEnd());
 
-            if (files == null)
+            if (files == null || files.Count == 0)
             {
-                throw new System.Exception("'facefixer.json' must contain a single array of strings of plugin names");
+                System.Console.WriteLine("'facefixer.json' must contain a single array of strings of plugin names");
+                return;
+            }
+
+            System.Console.WriteLine("Files to map to:");
+            foreach (var file in files)
+            {
+                System.Console.WriteLine($"  {file.FileName}");
             }
 
             var npcGroups = state.LoadOrder.PriorityOrder
@@ -47,6 +54,8 @@ namespace FaceFixer
                 .Where(listing => listing.Mod != null)
                 .Select(x => (ModKey: x.ModKey, Npcs: x.Mod!.Npcs))
                 .ToList();
+
+            uint count = 0;
 
             foreach (var npc in state.LoadOrder.PriorityOrder.WinningOverrides<INpcGetter>())
             {
@@ -72,8 +81,11 @@ namespace FaceFixer
                         Weight = true,
                         WornArmor = true,
                     });
+                    count++;
                 }
             }
+
+            System.Console.WriteLine($"Patched {count} Npcs");
         }
     }
 }
