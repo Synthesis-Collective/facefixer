@@ -49,10 +49,10 @@ namespace FaceFixer
                 System.Console.WriteLine($"  {file.FileName}");
             }
 
-            var npcGroups = state.LoadOrder.PriorityOrder
-                .Reverse()
-                .Where(listing => listing.Mod != null)
-                .Select(x => (ModKey: x.ModKey, Npcs: x.Mod!.Npcs))
+            var npcGroups = state.LoadOrder.ListedOrder
+                .Select(listing => listing.Mod)
+                .NotNull()
+                .Select(x => (x.ModKey, x.Npcs))
                 .Where(x => x.Npcs.Count > 0)
                 .ToList();
 
