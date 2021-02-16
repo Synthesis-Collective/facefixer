@@ -40,12 +40,6 @@ namespace FaceFixer
                 return;
             }
 
-            System.Console.WriteLine("Files to map to:");
-            foreach (var file in Settings.Value.TargetMods)
-            {
-                System.Console.WriteLine($"  {file.FileName}");
-            }
-
             var npcGroups = state.LoadOrder.ListedOrder
                 .Select(listing => listing.Mod)
                 .NotNull()
@@ -60,6 +54,12 @@ namespace FaceFixer
                         x => x.ModKey,
                         Comparer<ModKey>.Create((x, y) => Settings.Value.TargetMods.IndexOf(x).CompareTo(Settings.Value.TargetMods.IndexOf(y))))
                     .ToArray();
+            }
+
+            System.Console.WriteLine("Files to map to:");
+            foreach (var modKey in npcGroups.Select(x => x.ModKey))
+            {
+                System.Console.WriteLine($"  {modKey}");
             }
 
             uint count = 0;
