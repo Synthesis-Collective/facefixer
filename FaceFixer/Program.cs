@@ -50,7 +50,7 @@ namespace FaceFixer
                 .Select(listing => listing.Mod)
                 .NotNull()
                 .Select(x => (x.ModKey, x.Npcs))
-                .Where(x => x.Npcs.Count > 0)
+                .Where(x => x.Npcs.Count > 0 && Settings.Value.TargetMods.Contains(x.ModKey))
                 .ToList();
 
             uint count = 0;
@@ -59,8 +59,6 @@ namespace FaceFixer
             {
                 foreach (var npcGroup in npcGroups)
                 {
-                    if (!Settings.Value.TargetMods.Contains(npcGroup.ModKey)) continue;
-
                     if (!npcGroup.Npcs.RecordCache.TryGetValue(npc.FormKey, out var sourceNpc)) continue;
 
                     var modifiedNpc = state.PatchMod.Npcs.GetOrAddAsOverride(npc);
