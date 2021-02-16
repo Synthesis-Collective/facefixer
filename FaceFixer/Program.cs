@@ -51,16 +51,29 @@ namespace FaceFixer
                 .NotNull()
                 .Select(x => (x.ModKey, x.Npcs))
                 .Where(x => x.Npcs.Count > 0 && Settings.Value.TargetMods.Contains(x.ModKey))
-                .ToList();
+                .ToArray();
+
+            if (Settings.Value.PrioritizeBySpecifiedOrder)
+            {
+                npcGroups = npcGroups
+                    .OrderBy(
+                        x => x.ModKey,
+                        Comparer<ModKey>.Create((x, y) => Settings.Value.TargetMods.IndexOf(x).CompareTo(Settings.Value.TargetMods.IndexOf(y))))
+                    .ToArray();
+            }
 
             uint count = 0;
 
+            // For every Npc that exists
             foreach (var npc in state.LoadOrder.PriorityOrder.WinningOverrides<INpcGetter>())
             {
+                // For every Npc group in our target mods, in order
                 foreach (var npcGroup in npcGroups)
                 {
+                    // If our target mod contains a copy of the npc
                     if (!npcGroup.Npcs.RecordCache.TryGetValue(npc.FormKey, out var sourceNpc)) continue;
 
+                    // Copy in the face bits
                     var modifiedNpc = state.PatchMod.Npcs.GetOrAddAsOverride(npc);
                     modifiedNpc.DeepCopyIn(sourceNpc, new Npc.TranslationMask(false)
                     {

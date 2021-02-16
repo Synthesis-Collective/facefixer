@@ -7,6 +7,7 @@ namespace FaceFixer
 {
     public record Settings
     {
-        public HashSet<ModKey> TargetMods = new HashSet<ModKey>();
+        public List<ModKey> TargetMods = new List<ModKey>();
+        public bool PrioritizeBySpecifiedOrder = false;
     }
 }
