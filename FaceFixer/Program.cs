@@ -23,14 +23,8 @@ namespace FaceFixer
                     nickname: "Settings",
                     path: "settings.json",
                     out Settings)
-                .Run(args, new RunPreferences()
-                {
-                    ActionsForEmptyArgs = new RunDefaultPatcher()
-                    {
-                        IdentifyingModKey = "FaceFixer.esp",
-                        TargetRelease = GameRelease.SkyrimSE
-                    }
-                });
+                .SetTypicalOpen(GameRelease.SkyrimSE, "FaceFixer.esp")
+                .Run(args);
         }
         public static void RunPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state)
         {
@@ -65,13 +59,13 @@ namespace FaceFixer
             uint count = 0;
 
             // For every Npc that exists
-            foreach (var npc in state.LoadOrder.PriorityOrder.WinningOverrides<INpcGetter>())
+            foreach (var npc in state.LoadOrder.PriorityOrder.Npc().WinningOverrides())
             {
                 // For every Npc group in our target mods, in order
                 foreach (var npcGroup in npcGroups)
                 {
                     // If our target mod contains a copy of the npc
-                    if (!npcGroup.Npcs.RecordCache.TryGetValue(npc.FormKey, out var sourceNpc)) continue;
+                    if (!npcGroup.Npcs.TryGetValue(npc.FormKey, out var sourceNpc)) continue;
 
                     // Copy in the face bits
                     var modifiedNpc = state.PatchMod.Npcs.GetOrAddAsOverride(npc);
