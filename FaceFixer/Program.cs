@@ -71,18 +71,21 @@ namespace FaceFixer
                     var modifiedNpc = state.PatchMod.Npcs.GetOrAddAsOverride(npc);
                     modifiedNpc.DeepCopyIn(sourceNpc, new Npc.TranslationMask(false)
                     {
-                        AttackRace = true,
-                        FaceMorph = true,
-                        FaceParts = true,
-                        FarAwayModel = true,
-                        HairColor = true,
-                        HeadParts = true,
-                        HeadTexture = true,
-                        Height = true,
-                        TextureLighting = true,
-                        TintLayers = true,
-                        Weight = true,
-                        WornArmor = true,
+                        AttackRace = Settings.Value.PatchAttackRace,
+                        DefaultOutfit = Settings.Value.PatchDefaultOutfit,
+                        FaceMorph = Settings.Value.PatchFaceMorph,
+                        FaceParts = Settings.Value.PatchFaceParts,
+                        FarAwayModel = Settings.Value.PatchFarAwayModel,
+                        HairColor = Settings.Value.PatchHairColor,
+                        HeadParts = Settings.Value.PatchHeadParts,
+                        HeadTexture = Settings.Value.PatchHeadTexture,
+                        Height = Settings.Value.PatchHeight,
+                        SleepingOutfit = Settings.Value.PatchSleepingOutfit,
+                        TextureLighting = Settings.Value.PatchTextureLighting,
+                        TintLayers = Settings.Value.PatchTintLayers,
+                        Weight = Settings.Value.PatchWeight,
+                        WornArmor = Settings.Value.PatchWornArmor,
+
                     });
                     count++;
                 }
