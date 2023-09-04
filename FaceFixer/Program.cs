@@ -4,10 +4,10 @@ using Mutagen.Bethesda.Skyrim;
 using Noggog;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using System.IO;
 using System.Threading.Tasks;
 using System;
+using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Plugins.Records;
 
 namespace FaceFixer
 {
